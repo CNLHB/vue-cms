@@ -8,6 +8,8 @@ util.title = function (title) {
 };
 
 const ajaxUrl = process.env.NODE_ENV === 'development' ?
+// 'http://www.xquery.cn:3030/v1':
+// 'http://localhost:3000/v1';
   'http://localhost:3000/v1' :
   'http://www.xquery.cn:3030/v1';
 

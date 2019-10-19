@@ -30,8 +30,12 @@ const routers = [
         meta: {module: "/admin", group: "set", title: '管理员 - 列表'},
         component: (resolve) => require(['../views/admin/index.vue'], resolve),
       },
-
-
+      {
+        path: 'adminlist',
+        name: 'adminList',
+        meta: {module: "/adminList", group: "set", title: '管理员 - 列表'},
+        component: (resolve) => require(['../views/admin/adminList.vue'], resolve),
+      },
       //todo: 分类管理
       {
         path: 'category',
@@ -53,29 +57,35 @@ const routers = [
       },
       //todo: 文章管理
       {
-        path: 'article',
-        name: 'article',
-        meta: {module: "/article", group: "article", title: '文章 - 列表'},
+        path: 'goods',
+        name: 'goods',
+        meta: {module: "/goods", group: "goods", title: '物品 - 列表'},
         component: (resolve) => require(['../views/article/list.vue'], resolve),
       },
       {
-        path: 'article/create',
-        name: 'article/create',
-        meta: {module: "/article/create", group: "article", title: '文章 - 创建'},
+        path: 'goods/create',
+        name: 'goods/create',
+        meta: {module: "/goods/create", group: "goods", title: '资产 - 创建'},
         component: (resolve) => require(['../views/article/create.vue'], resolve),
       },
       {
-        path: 'article/update/:id',
-        name: 'article/update',
-        meta: {edit: true, module: "/article", group: "article", title: '文章 - 更新'},
+        path: 'goods/update/:id',
+        name: 'goods/update',
+        meta: {edit: true, module: "/goods", group: "goods", title: '资产 - 更新'},
         component: (resolve) => require(['../views/article/update.vue'], resolve),
       },
-      //todo: 评论管理
+      //todo: 借还管理
       {
-        path: 'comments',
-        name: 'comments',
-        meta: {module: "/comments", group: "comments", title: '评论 - 列表'},
-        component: (resolve) => require(['../views/comments/list.vue'], resolve),
+        path: 'loanoutList',
+        name: 'loanoutList',
+        meta: {module: "/loanoutList", group: "loanoutList", title: '借出- 列表'},
+        component: (resolve) => require(['../views/loanOut/loanOutList.vue'], resolve),
+      },
+      {
+        path: 'returnList',
+        name: 'returnList',
+        meta: {module: "/returnList", group: "returnList", title: '归还 - 列表'},
+        component: (resolve) => require(['../views/loanOut/returnList.vue'], resolve),
       },
       {
         //todo: 404

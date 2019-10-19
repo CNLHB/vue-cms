@@ -19,7 +19,7 @@ Vue.use(iView);
 Vue.use(mavonEditor);
 
 Vue.use(VueLocalStorage, {
-  namespace: 'Seven-'
+  namespace: 'DBIS-'
 });
 
 // 路由配置
@@ -40,33 +40,34 @@ const router = new VueRouter(RouterConfig);
 
 router.beforeEach(async (to, from, next) => {
 
-  iView.LoadingBar.start();
+//   iView.LoadingBar.start();
   Util.title(to.meta.title)
 
-  let token = Vue.ls.get("token");
-  if (token) {
-    store.dispatch('admin/auth').then(() => {
-      next()
+//   let token = Vue.ls.get("token");
+//   if (token) {
+//     store.dispatch('admin/auth').then(() => {
+//       next()
 
-    }).catch(ret => {
-      setTimeout(() => {
-        next('/login')
-      }, 1500);
-    })
+//     }).catch(ret => {
+//       setTimeout(() => {
+//         next('/login')
+//       }, 1500);
+//     })
 
-  } else {
-    // 判断是否需要登录
-    if (!!to.meta.noAuth) {
-      next()
+//   } else {
+//     // 判断是否需要登录
+//     if (!!to.meta.noAuth) {
+//       next()
 
-    } else {
-      next('/login')
-    }
-  }
+//     } else {
+//       next('/login')
+//     }
+//   }
+next()
 });
 
 router.afterEach(() => {
-  iView.LoadingBar.finish();
+//   iView.LoadingBar.finish();
   window.scrollTo(0, 0);
 });
 

@@ -1,46 +1,34 @@
 <template>
   <section>
     <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100">
-      <FormItem label="文章标题" prop="title">
-        <Input v-model="formValidate.title" placeholder="文章标题"></Input>
+      <FormItem label="物品名称" prop="name">
+        <Input v-model="formValidate.name" placeholder="分类名称"></Input>
       </FormItem>
-      <FormItem label="文章作者" prop="author">
-        <Input v-model="formValidate.author" placeholder="文章作者"></Input>
+      <FormItem label="使用部门" prop="key">
+        <Input v-model="formValidate.key" placeholder="使用部门"></Input>
       </FormItem>
-      <FormItem label="文章分类" v-if="categoryList.length > 0">
+      <FormItem label="物品分类" v-if="categoryList.length > 0">
         <Select v-model="formValidate.category_id">
           <Option v-for="(item, index) in categoryList" :value="item.id" :key="index">{{item.name}}</Option>
         </Select>
       </FormItem>
-      <FormItem label="文章封面" prop="cover">
-        <div class="cover">
-          <div class="upload">
-            <Upload
-              multiple
-              type="drag"
-              action="http://www.xquery.cn:3030/v1/upload"
-              :show-upload-list="false"
-              :on-success="uploadSuccess"
-              :on-error="uploadError"
-              :data="{token}">
-              <div style="padding: 20px 0">
-                <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
-                <p>点击或者拖拽上传</p>
-              </div>
-            </Upload>
-          </div>
-          <div class="article-cover">
-            <img :src="formValidate.cover" alt="cover">
-          </div>
-        </div>
+      <FormItem label="使用人" prop="user">
+        <Input v-model="formValidate.user" placeholder="使用人"></Input>
       </FormItem>
-      <FormItem label="文章内容" prop="content">
-        <mavon-editor
-          v-model="formValidate.content"
-          :ishljs="true"
-          ref=md>
-        </mavon-editor>
-
+      <FormItem label="价格" prop="price">
+        <Input v-model="formValidate.price" placeholder="价格"></Input>
+      </FormItem>
+      <FormItem label="规格型号" prop="model">
+        <Input v-model="formValidate.model" placeholder="规格型号"></Input>
+      </FormItem>
+            <FormItem label="物品数量" prop="num">
+        <Input v-model="formValidate.num" placeholder="规格型号"></Input>
+      </FormItem>
+      <FormItem label="状态" prop="status">
+        <Input v-model="formValidate.status" placeholder="状态"></Input>
+      </FormItem>
+      <FormItem label="购买时间" prop="created_at">
+        <Input v-model="formValidate.created_at" placeholder="购买时间"></Input>
       </FormItem>
       <FormItem>
         <Button @click="handleReset('formValidate')">重置</Button>
@@ -50,140 +38,74 @@
   </section>
 </template>
 <script>
-  import {mapActions} from 'vuex';
-  import getUploadToken from '../../libs/upload-token'
+import { mapActions } from "vuex";
 
-  export default {
-    data() {
-      return {
-        token: '',
-        id: this.$route.params.id,
-        detail: null,
-        categoryList: [],
-        formValidate: {
-          title: '',
-          author: '',
-          category_id: '',
-          cover: '',
-          content: ''
-        },
-        ruleValidate: {
-          title: [
-            {required: true, message: '文章标题不能为空', trigger: 'blur'}
-          ],
-          author: [
-            {required: true, message: '文章作者不能为空', trigger: 'blur'}
-          ],
-          cover: [
-            {required: true, message: '文章封面不能为空', trigger: 'blur'}
-          ],
-          content: [
-            {required: true, message: '文章内容不能为空', trigger: 'blur'}
-          ]
+export default {
+  data() {
+    return {
+      id: this.$route.params.id,
+      detail: null,
+      categoryList: [
+        {
+          article_nums: 7,
+          id: 1,
+          key: "IT",
+          name: "IT",
+          parent_id: 0
         }
+      ],
+      formValidate: {
+        name: "",
+        key: "",
+        user: "liaoxx",
+        model: "联想",
+        price: 6999,
+        category_id: "4",
+        department: "实验室",
+        created_at: "2019-10-15",
+        id: 42,
+        nickName: "笔记本电脑",
+        num: 3,
+        status: "使用中"
+      },
+      ruleValidate: {
+        name: [
+          { required: true, message: "分类名称不能为空", trigger: "blur" }
+        ],
+        key: [
+          { required: true, message: "分类关键字不能为空", trigger: "blur" }
+        ]
       }
+    };
+  },
+  created() {},
+  methods: {
+    ...mapActions({
+      createCategory: "category/createCategory"
+    }),
+    // 创建
+    async _createCategory() {
+      this.formValidate.id = this.id;
+      try {
+        console.log(this.formValidate);
+        await this.createCategory(this.formValidate);
+        this.$Message.success("创建成功!");
+        this.$router.push("/category");
+      } catch (e) {}
     },
-    created() {
-      this._getArticle();
-      this._getCategoryList();
-      this._getUploadToken();
+    // 提交
+    handleSubmit(name) {
+      this.$refs[name].validate(valid => {
+        if (valid) {
+          this._createCategory();
+        } else {
+          this.$Message.error("请完成表单!");
+        }
+      });
     },
-    methods: {
-      ...mapActions({
-        getArticle: 'article/getArticle',
-        updateArticle: 'article/updateArticle',
-        getCategoryList: 'category/getCategoryList'
-      }),
-      // 上传图片成功
-      uploadSuccess(response) {
-        console.log(response)
-        const url = `http://www.xquery.cn/${response.key}`;
-        this.formValidate.cover = url;
-        this.$Message.success('上传成功!');
-      },
-      // 上传图片失败
-      uploadError(response) {
-        this.$Message.success('上传失败!');
-        console.log(response)
-      },
-      // 获取上传token
-      async _getUploadToken() {
-        try {
-          const res = await getUploadToken();
-          this.token = res.token;
-
-        } catch (e) {
-          console.log(e)
-        }
-      },
-      // 获取文章列表
-      async _getArticle() {
-        try {
-          const res = await this.getArticle({
-            id: this.id
-          });
-          const article = res.data.data;
-
-          this.formValidate.title = article.title;
-          this.formValidate.author = article.author;
-          this.formValidate.category_id = parseInt(article.category_id);
-          this.formValidate.cover = article.cover;
-          this.formValidate.content = article.content;
-
-        } catch (e) {
-
-        }
-      },
-      // 获取分类列表
-      async _getCategoryList() {
-        const res = await this.getCategoryList();
-        this.categoryList = res.data.data;
-      },
-      // 更新
-      async _updateArticle() {
-        this.formValidate.id = this.id;
-
-        try {
-          await this.updateArticle(this.formValidate);
-          this.$Message.success('更新成功!');
-          this.$router.push('/article');
-
-        } catch (e) {
-
-        }
-      },
-      // 提交
-      handleSubmit(name) {
-        this.$refs[name].validate((valid) => {
-          if (valid) {
-            this._updateArticle();
-
-          } else {
-            this.$Message.error('请完成表单!');
-          }
-        })
-      },
-      handleReset(name) {
-        this.$refs[name].resetFields();
-      }
+    handleReset(name) {
+      this.$refs[name].resetFields();
     }
   }
+};
 </script>
-<style scoped>
-  .article-cover {
-    width: 120px;
-  }
-
-  .article-cover img {
-    width: 100%;
-  }
-
-  .cover {
-    display: flex;
-  }
-
-  .cover .upload {
-    width: 280px;
-    margin-right: 32px;
-  }
-</style>

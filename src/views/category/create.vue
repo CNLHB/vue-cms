@@ -47,6 +47,7 @@
         this.formValidate.id = this.id;
 
         try {
+            console.log(this.formValidate)
           await this.createCategory(this.formValidate);
           this.$Message.success('创建成功!');
           this.$router.push('/category');

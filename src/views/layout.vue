@@ -2,7 +2,7 @@
   <div class="layout">
     <Layout>
       <Sider ref="side1" hide-trigger collapsible :collapsed-width="80" v-model="isCollapsed" style="overflow-y: auto">
-        <div class="layout-logo-left" :style="isCollapsed ? 'font-size:12px': ''">liaohuabiao.com</div>
+        <div class="layout-logo-left" :style="isCollapsed ? 'font-size:12px': ''">dbis.com</div>
         <Menu
           :accordion="true"
           width="auto"
@@ -45,7 +45,8 @@
             <div style="float: right;margin-right: 20px" v-if="adminAuth">
               <Dropdown transfer trigger="click" @on-click="exitAccount">
                 <a href="javascript:void(0)">
-                  <span class="main-user-name">{{adminAuth.email}}</span>
+                    <!-- adminAuth.email -->
+                  <span class="main-user-name">DBIS</span>
                   <Icon type="arrow-down-b"></Icon>
                 </a>
                 <DropdownMenu slot="list">
@@ -72,7 +73,7 @@
             </div>
           </div>
           <div class="layout-copy">
-            2019 &copy; liaohuabiao.com
+            2019 &copy; dbis.com
           </div>
         </Content>
       </Layout>

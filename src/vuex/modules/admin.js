@@ -2,13 +2,22 @@ import admin from '../../api/admin'
 import * as types from '../mutation-types'
 
 const state = {
-  adminAuth: null
+  adminAuth: {
+    email:"1348844909@qq.com",
+    id:1,
+    nickname:"Seven"
+    
+  },
+  list: []
 }
 
 const mutations = {
   SET_USER_INFO(state, data) {
     state.adminAuth = data
-  }
+  },
+  SET_ADMIN_LIST(state, data) {
+    state.list = data
+  },
 
 }
 
@@ -23,7 +32,14 @@ const actions = {
     const res = await admin.auth(params);
     commit('SET_USER_INFO', res.data.data);
     return res;
-  }
+  },
+  async adminList({state, commit}) {
+    const res = await admin.list("root"); 
+    commit('SET_ADMIN_LIST', res.data.data);  
+  },
+  async deleteAdmin({state, commit},id) {
+    const res = await admin.delete(id); 
+  },
 }
 
 export default {

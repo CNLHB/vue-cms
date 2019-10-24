@@ -60,19 +60,25 @@ const routers = [
         path: 'goods',
         name: 'goods',
         meta: {module: "/goods", group: "goods", title: '物品 - 列表'},
-        component: (resolve) => require(['../views/article/list.vue'], resolve),
+        component: (resolve) => require(['../views/goods/list.vue'], resolve),
+      },
+      {
+        path: 'goods/list/:id',
+        name: 'goods/list',
+        meta: {module: "/goods", group: "goods", title: '物品 - 列表'},
+        component: (resolve) => require(['../views/goods/list.vue'], resolve),
       },
       {
         path: 'goods/create',
         name: 'goods/create',
         meta: {module: "/goods/create", group: "goods", title: '资产 - 创建'},
-        component: (resolve) => require(['../views/article/create.vue'], resolve),
+        component: (resolve) => require(['../views/goods/create.vue'], resolve),
       },
       {
         path: 'goods/update/:id',
         name: 'goods/update',
         meta: {edit: true, module: "/goods", group: "goods", title: '资产 - 更新'},
-        component: (resolve) => require(['../views/article/update.vue'], resolve),
+        component: (resolve) => require(['../views/goods/update.vue'], resolve),
       },
       //todo: 借还管理
       {

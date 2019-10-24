@@ -25,6 +25,7 @@ const actions = {
 
   // 更新分类
   async updateCategory({state, commit}, params) {
+      console.log(params)
     return category.update(params);
   },
 

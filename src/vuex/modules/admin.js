@@ -5,6 +5,7 @@ const state = {
   adminAuth: {
     email:"1348844909@qq.com",
     id:1,
+    type:'root',
     nickname:"Seven"
     
   },
@@ -33,9 +34,9 @@ const actions = {
     commit('SET_USER_INFO', res.data.data);
     return res;
   },
-  async adminList({state, commit}) {
-    const res = await admin.list("root"); 
-    commit('SET_ADMIN_LIST', res.data.data);  
+  async adminList({state, commit},data) {
+    // const res = await admin.list("root"); 
+    commit('SET_ADMIN_LIST', data);  
   },
   async deleteAdmin({state, commit},id) {
     const res = await admin.delete(id); 

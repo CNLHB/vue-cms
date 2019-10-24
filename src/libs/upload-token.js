@@ -1,7 +1,5 @@
 const qiniu = require('qiniu')
 
-// 自己可以到"www.qiniu.com" 申请自己的七牛空间
-// 这个账号是我的，不是开放的哦
 const ACCESS_KEY = "iIESo7ruEIWIEwLNRHpybNjahv9NGlN7vVac3PLQ";
 const SECRET_KEY = "xFLqbpefbXiQY9dcOo8ICtIuYgGn1HhT-93B3DY8";
 

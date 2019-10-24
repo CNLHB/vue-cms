@@ -1,12 +1,12 @@
 <template>
   <section>
     <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100">
-      <FormItem label="分类名称" prop="name">
-        <Input v-model="formValidate.name" placeholder="分类名称"></Input>
+      <FormItem label="分类名称" prop="cateName">
+        <Input v-model="formValidate.cateName" placeholder="分类名称"></Input>
       </FormItem>
-      <FormItem label="分类关键字" prop="key">
-        <Input v-model="formValidate.key" placeholder="分类关键字"></Input>
-      </FormItem>
+      <!-- <FormItem label="分类描述" prop="key">
+        <Input v-model="formValidate.key" placeholder="分类描述"></Input>
+      </FormItem> -->
       <FormItem>
         <Button @click="handleReset('formValidate')">重置</Button>
         <Button type="primary" @click="handleSubmit('formValidate')" style="margin-left: 8px">提交</Button>
@@ -23,15 +23,12 @@
         id: this.$route.params.id,
         detail: null,
         formValidate: {
-          name: '',
+          cateName: '',
           key: ''
         },
         ruleValidate: {
           name: [
             {required: true, message: '分类名称不能为空', trigger: 'blur'}
-          ],
-          key: [
-            {required: true, message: '分类关键字不能为空', trigger: 'blur'}
           ]
         }
       }
@@ -47,11 +44,12 @@
       async _getCategory() {
         try {
           const res = await this.getCategory({
-            id: this.id
+            cid: this.id
           });
           const category = res.data.data;
-          this.formValidate.name = category.name;
-          this.formValidate.key = category.key;
+          console.log(res.data)
+          this.formValidate.cateName = category.cateName;
+        //   this.formValidate.key = category.key;
 
         } catch (e) {
 
@@ -60,7 +58,7 @@
       // 更新
       async _updateCategory() {
         this.formValidate.id = this.id;
-
+        console.log(this.formValidate)
         try {
           await this.updateCategory(this.formValidate);
           this.$Message.success('更新成功!');

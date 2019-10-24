@@ -12,13 +12,18 @@
           <strong>{{ row.name }}</strong>
         </template>
         <template slot-scope="{ row, index }" slot="look">
-          <Button type="primary" size="small" style="margin-right: 5px" @click="look(row.id)">查看</Button>
+          <Button type="primary" size="small" style="margin-right: 5px" @click="look(row.cid)">查看</Button>
         </template>
         <template slot-scope="{ row, index }" slot="action">
-          <Button type="primary" size="small" style="margin-right: 5px" @click="update(row.id)">编辑</Button>
-          <Button type="error" size="small" @click="destroy(row.id)">删除</Button>
+          <Button type="primary" size="small" style="margin-right: 5px" @click="update(row.cid)">编辑</Button>
+          <Button type="error" size="small" @click="destroy(row.cid)">删除</Button>
         </template>
       </Table>
+      <section class="page">
+        <Page 
+        :total="page.total" :page-size="page.per_page" :current="page.current_page" show-total
+         on-change="changePage" />
+      </section>
     </section>
   </section>
 </template>
@@ -30,40 +35,26 @@ export default {
   name: "list",
   data() {
     return {
+      page: {
+        count: 0,
+        current_page: 1,
+        per_page: 1,
+        total: 0
+        // total_pages: 4
+      },
+      currentPage:0,
       list: [
-        {
-          look: "查看",
-          id: 1,
-          IemNum: "11",
-          name: "IT",
-          parent_id: 0
-        },
-        {
-          look: "查看",
-          id: 11,
-          IemNum: "12",
-          name: "工具",
-          parent_id: 0
-        },
-        {
-          look: "查看",
-          id: 10,
-          IemNum: "5",
-          name: "图书",
-          parent_id: 0
-        }
       ],
-      page: null,
       columns: [
         {
           title: "ID",
-          key: "id",
+          key: "cid",
           width: 80,
           align: "center"
         },
         {
           title: "分类名称",
-          key: "name",
+          key: "cateName",
           align: "center"
         },
         {
@@ -87,7 +78,7 @@ export default {
     };
   },
   created() {
-    this._getCategoryList();
+    this._getCategoryList({ pageNum: 1, pageSize: 10 });
   },
   methods: {
     ...mapActions({
@@ -95,9 +86,22 @@ export default {
       destroyCategory: "category/destroyCategory"
     }),
     // 获取分类
-    async _getCategoryList() {
-      const res = await this.getCategoryList();
-      this.list = res.data.data;
+    async _getCategoryList(params) {
+      const { data } = await this.getCategoryList(params);
+      this.page = {
+        count: data.data.total,
+        total: data.data.total,
+        current_page: 1,
+        per_page: 10
+      };
+      this.list = data.data.list.map(item => {
+        return {
+          cid: item.cid,
+          IemNum: item.assets.length,
+          cateName: item.cateName,
+          parent_id: 0
+        };
+      });
     },
     // 路由跳转
     toPathLink(path) {
@@ -108,8 +112,7 @@ export default {
       this.$router.push(`/category/update/${id}`);
     },
     look(id) {
-    console.log(id)
-    //   this.$router.push(`/goods/list/${id}`);
+        this.$router.push(`/goods/list/${id}`);
     },
     // 删除分类
     destroy(id) {
@@ -133,13 +136,27 @@ export default {
           this.$Message.warning("取消！");
         }
       });
+    },
+    changePage(page) {
+      console.log(page);
+      this.$router.replace({
+        query: merge(this.$route.query, {
+          page
+        })
+      });
+      this.currentPage = page;
     }
   }
+  // 切换分页
 };
 </script>
 
 <style scoped>
 .listMain {
   min-width: 1000px;
+}
+.page {
+  padding: 32px 0;
+  text-align: center;
 }
 </style>

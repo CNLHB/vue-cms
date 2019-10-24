@@ -10,19 +10,21 @@ export default {
   auth(params) {
     return fetch.get('/admin/auth', params)
   },
-  list(root) {
+  list(root,pageNum,pageSize) {
     return fetch.Util.ajax({
             method: 'get',
-            url: "/admin/list",
+            url: "/users",
             params: {
-                type: root
+                type: root,
+                pageNum,
+                pageSize
             }
     })
   },
   delete(id) {
     return fetch.Util.ajax({
-            method: 'get',
-            url: "/admin/delete",
+            method: 'delete',
+            url: "/users",
             params: {
                 id: id
             }

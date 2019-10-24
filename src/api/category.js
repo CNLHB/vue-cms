@@ -20,9 +20,9 @@ export default {
 
   // 分类详情
   detail(params) {
-    const {id} = params;
+    const {cid} = params;
     delete params.id;
-    return fetch.get('/category/' + id, params);
+    return fetch.get('/category/' + cid);
   },
 
   // 创建分类
@@ -35,6 +35,6 @@ export default {
     const {id} = params;
     delete params.id;
 
-    return fetch.get('/category/' + id + '/article', params);
+    return fetch.get('/category/detail/'+ id, params);
   }
 }

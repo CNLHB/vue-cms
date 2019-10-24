@@ -1,11 +1,11 @@
 <template>
   <section>
     <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100">
-      <FormItem label="分类名称" prop="name">
-        <Input v-model="formValidate.name" placeholder="分类名称"></Input>
+      <FormItem label="分类名称" prop="cateName">
+        <Input v-model="formValidate.cateName" placeholder="分类名称"></Input>
       </FormItem>
-      <FormItem label="分类关键字" prop="key">
-        <Input v-model="formValidate.key" placeholder="分类关键字"></Input>
+      <FormItem label="分类描述" prop="key">
+        <Input v-model="formValidate.key" placeholder="分类描述"></Input>
       </FormItem>
       <FormItem>
         <Button @click="handleReset('formValidate')">重置</Button>
@@ -23,7 +23,7 @@
         id: this.$route.params.id,
         detail: null,
         formValidate: {
-          name: '',
+          cateName: '',
           key: ''
         },
         ruleValidate: {

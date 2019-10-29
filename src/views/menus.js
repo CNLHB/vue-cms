@@ -62,23 +62,23 @@ const menus = [
           }
         ]
       },
-      {
-        name: "借出管理",
-        path: "loanout",
-        icon: "md-text",
-        children: [
-          {
-            name: "借出列表",
-            path: "/loanoutList",
-            icon: "md-list"
-          },
-          {
-            name: "归还列表",
-            path: "/returnList",
-            icon: "md-list"
-          },
-        ]
-      }
+    //   {
+    //     name: "借出管理",
+    //     path: "loanout",
+    //     icon: "md-text",
+    //     children: [
+    //       {
+    //         name: "借出列表",
+    //         path: "/loanoutList",
+    //         icon: "md-list"
+    //       },
+    //       {
+    //         name: "归还列表",
+    //         path: "/returnList",
+    //         icon: "md-list"
+    //       },
+    //     ]
+    //   }
 
   ];
 

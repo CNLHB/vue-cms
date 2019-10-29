@@ -1,6 +1,12 @@
 <template>
   <section class="listMain">
     <!-- admin.list -->
+    <Button
+      type="primary"
+      @click="toPathLink('/admin/create')"
+      icon="md-add"
+      style="margin-bottom: 16px;"
+    >新增管理员</Button>
     <Table border :columns="columns" :data="list">
       <template slot-scope="{ row }" slot="name">
         <strong>{{ row.name }}</strong>
@@ -35,7 +41,6 @@ export default {
         current_page: 1,
         per_page: 10,
         total: 39
-        // total_pages: 4
       },
       list: [],
       columns: [
@@ -43,6 +48,11 @@ export default {
           title: "ID",
           key: "id",
           width: 80,
+          align: "center"
+        },
+                {
+          title: "管理员邮箱",
+          key: "userMail",
           align: "center"
         },
         {
@@ -55,11 +65,7 @@ export default {
           key: "userPrivilege",
           align: "center"
         },
-        // {
-        //   title: "创建时间",
-        //   key: "createTime",
-        //    align: "center"
-        // },
+
         {
           title: "Action",
           slot: "action",
@@ -70,32 +76,7 @@ export default {
     };
   },
   async created() {
-    //获取管理员列表
-    let {
-      data: { data: list }
-    } = await admin.list("root", 1, 10);
-
-    console.log(list);
-    //     count: 39,
-    // current_page: 1,
-    // per_page: 10,
-    // total: 39,
-    // // total_pages: 4
-    this.page = {
-      count: list.total,
-      current_page: list.pageNum,
-      total: list.total,
-      per_page: 10
-    };
-    let adminList = list.list.map(item => {
-      return {
-        id: item.id,
-        userName: item.userName,
-        userPrivilege: item.userPrivilege == "暂无权限限制" ? 16 : 1
-      };
-    });
-    this.list = adminList;
-    // this.getList(adminList);
+    this._getAdminList();
   },
   computed: {
     ...mapState(["admin"])
@@ -106,9 +87,7 @@ export default {
       getList: "admin/adminList",
       deleteAdmin: "admin/deleteAdmin"
     }),
-    ...mapMutations({
-      //   getList: "admin/SET_ADMIN_LIST"
-    }),
+    ...mapMutations({}),
     // 删除
     destroy(id) {
       var slef = this;
@@ -120,7 +99,7 @@ export default {
           try {
             await this.deleteAdmin(id);
             this.$Message.success("删除成功");
-            this._getCategoryList();
+            this._getAdminList();
           } catch (e) {
             this.$Message.error(e);
           } finally {
@@ -131,15 +110,35 @@ export default {
           this.$Message.warning("取消！");
         }
       });
-    }, // 切换分页
+    },
+    toPathLink(path) {
+      this.$router.push(path);
+    }, 
+    // 切换分页
     handlePage(page) {
-      this.$router.replace({
-        query: merge(this.$route.query, {
-          page
-        })
-      });
       this.currentPage = page;
-      this._getArticleList();
+      this._getAdminList();
+    },
+    async _getAdminList() {
+      //获取管理员列表
+      let {
+        data: { data: list }
+      } = await admin.list("root", this.currentPage, 10);
+      this.page = {
+        count: list.total,
+        current_page: list.pageNum,
+        total: list.total,
+        per_page: 10
+      };
+      let adminList = list.list.map(item => {
+        return {
+          id: item.id,
+          userName: item.userName,
+          userPrivilege: item.userPrivilege == "暂无权限限制" ? 16 : 1,
+          userMail:item.userMail
+        };
+      });
+      this.list = adminList;
     }
   }
 };

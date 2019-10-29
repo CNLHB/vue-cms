@@ -35,6 +35,6 @@ export default {
     const {id} = params;
     delete params.id;
 
-    return fetch.get('/category/detail/'+ id, params);
+    return fetch.get('/category/detail/'+id, {cid:id});
   }
 }

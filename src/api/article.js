@@ -16,7 +16,7 @@ export default {
     const {id} = params;
     delete params.id;
 
-    return fetch.get('/asset/' + id, params);
+    return fetch.get('/asset/detail/'+id, {aid:id});
   },
 
   // 更新物品

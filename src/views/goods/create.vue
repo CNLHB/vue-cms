@@ -19,19 +19,26 @@
           >{{item.cateName}}</Option>
         </Select>
       </FormItem>
+      <FormItem label="购买时间" prop="payTime">
+        <DatePicker
+          type="datetime"
+          @on-change="playTimeChange"
+          placeholder="Select date and time"
+          style="width: 200px"
+        ></DatePicker>
+      </FormItem>
 
+      <FormItem label="物品数量" >
+        <InputNumber :min="1" v-model="formValidate.count" prop="count"></InputNumber>
+      </FormItem>
+      <FormItem label="状态">
+        <!-- <Input v-model="formValidate.status" placeholder="状态: 1可用 其他不可用" /> -->
+        <Select v-model="formValidate.status" style="width:200px"  prop="status">
+          <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+        </Select>
+      </FormItem>
       <FormItem label="价格" prop="price">
         <Input v-model="formValidate.price" placeholder="价格" />
-      </FormItem>
-
-      <FormItem label="物品数量" prop="count">
-        <Input v-model="formValidate.count" placeholder="物品数量" />
-      </FormItem>
-      <FormItem label="状态" prop="status">
-        <Input v-model="formValidate.status" placeholder="状态" />
-      </FormItem>
-      <FormItem label="购买时间" prop="payTime">
-        <Input v-model="formValidate.payTime" placeholder="2019-10-08 19:16:02" />
       </FormItem>
       <FormItem>
         <Button @click="handleReset('formValidate')">重置</Button>
@@ -47,8 +54,20 @@ export default {
     return {
       id: this.$route.params.id,
       detail: null,
+      model1: "",
+      cityList: [
+        {
+          value:1,
+          label: "可用"
+        },
+         {
+          value: 0,
+          label: "不可用"
+        }
+      ],
+
       categoryList: [
-                  {
+        {
           cateId: "1",
           cateName: "IT",
           parent_id: 0
@@ -61,10 +80,10 @@ export default {
         userId: "",
         price: "",
         payTime: "",
-        count: "",
-        status: "",
-        image:'',
-        cateId:'',
+        count: 1,
+        status: 1,
+        image: "",
+        cateId: ""
       },
       ruleValidate: {
         assetName: [
@@ -79,9 +98,7 @@ export default {
         status: [
           { required: true, message: "状态关键字不能为空", trigger: "blur" }
         ],
-        count: [
-          { required: true, message: "物品数量关键字不能为空", trigger: "blur" }
-        ],
+        count: [{ required: false, message: "物品数量关键字不能为空" ,trigger: "blur"}],
         payTime: [
           { required: true, message: "购买时间关键字不能为空", trigger: "blur" }
         ],
@@ -103,11 +120,8 @@ export default {
     async _createCategory() {
       this.formValidate.id = this.id;
       this.formValidate.userId = 8;
-      
       try {
-        console.log( this.formValidate)
-       let d =  await this.createArticle(this.formValidate);
-       console.log(d)
+        let d = await this.createArticle(this.formValidate);
         this.$Message.success("创建成功!");
         this.$router.push("/goods");
       } catch (e) {}
@@ -135,6 +149,9 @@ export default {
     },
     handleReset(name) {
       this.$refs[name].resetFields();
+    },
+    playTimeChange(time) {
+      this.formValidate.payTime = time;
     }
   }
 };

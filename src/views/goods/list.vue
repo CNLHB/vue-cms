@@ -1,6 +1,6 @@
 <template>
   <section class="listMain">
-    <section v-if="list.length > 0">
+    <section>
       <Table border :columns="columns" :data="filterList">
         <template slot-scope="{ row }" slot="name">
           <strong>{{ row.name }}</strong>
@@ -10,11 +10,6 @@
           <Button type="error" size="small" @click="destroy(row.aid)">删除</Button>
         </template>
       </Table>
-      <!-- count: 32
-current_page: 1
-per_page: 10
-total: 32
-      total_pages: 4-->
       <section class="page">
         <Page
           :total="page.total"
@@ -41,7 +36,6 @@ export default {
         current_page: 1,
         per_page: 10,
         total: 39
-        // total_pages: 4
       },
       list: [],
       page: {},
@@ -70,12 +64,6 @@ export default {
           key: "cateName",
           width: 100
         },
-        // {
-        //   title: "使用人",
-        //   width: 100,
-        //   align: "center",
-        //   key: "user"
-        // },
         {
           title: "价格",
           width: 100,
@@ -117,17 +105,22 @@ export default {
   },
   computed: {
     filterList() {
-      return this.list.length > this.currentPage * 10
-        ? this.list.slice((this.currentPage - 1) * 10, this.currentPage * 10)
-        : this.list.slice((this.currentPage - 1) * 10);
+      if (this.$route.params.id) {
+        return this.list.length > this.currentPage * 10
+          ? this.list.slice((this.currentPage - 1) * 10, this.currentPage * 10)
+          : this.list.slice((this.currentPage - 1) * 10);
+      } else {
+        return this.list;
+      }
     }
   },
   async mounted() {
     if (this.$route.params.id) {
       this.getCateList();
       return;
+    } else {
+      this._getArticleList();
     }
-    this._getArticleList();
   },
   methods: {
     ...mapActions({
@@ -136,41 +129,63 @@ export default {
       getCategoryArticle: "category/getCategoryArticle"
     }),
 
-    // 获取文章
+    // 获取物品
     async _getArticleList(size = 10) {
-      // let {page, desc, category_id, keyword} = this.$route.query;
-      const res = await this.getArticleList({
+      const {
+        data: { data }
+      } = await this.getArticleList({
         pageNum: this.currentPage,
         pageSize: size
       });
-
-      //   this.list = res.data.data.data;
-      //   this.page = res.data.data.meta;
+      this.page = {
+        count: data.total,
+        current_page: data.pageNum,
+        per_page: data.pageSize,
+        total: data.total
+      };
+      this.list = data.list.map(item => {
+        return {
+          aid: item.aid,
+          assetName: item.assetName,
+          cateName: item.category.cateName,
+          brand: item.brand,
+          remark: item.remark,
+          userId: item.userId,
+          price: item.price,
+          payTime: item.payTime,
+          count: item.count,
+          status: item.status == 1 ? "使用中" : "未使用",
+          image: item.image,
+          cateId: item.cateId
+        };
+      });
     },
     async getCateList() {
       if (this.$route.params.id) {
         let {
           data: { data: lists }
         } = await this.getCategoryArticle({ id: this.$route.params.id });
-        let cateName = lists[0].cateName;
+        if(!lists){
+            return
+        }
         this.page = {
-          count: lists[0].assets.length,
-          current_page: 1,
+          count: lists.total,
+          current_page: lists.pageNum,
           per_page: 10,
-          total: lists[0].assets.length
+          total: lists.total
         };
-        this.list = lists[0].assets.map(item => {
+        this.list = lists.list[0].assets.map(item => {
           return {
             aid: item.aid,
             assetName: item.assetName,
-            cateName: cateName,
+            cateName: lists.list[0].cateName,
             brand: item.brand,
             remark: item.remark,
             userId: item.userId,
             price: item.price,
             payTime: item.payTime,
             count: item.count,
-            status: item.status,
+            status: item.status == 1 ? "使用中" : "未使用",
             image: item.image,
             cateId: item.cateId
           };
@@ -180,17 +195,10 @@ export default {
     },
     // 切换分页
     handlePage(page) {
-      console.log(page);
       if (this.$route.params.id) {
         this.currentPage = page;
         return;
       }
-
-      this.$router.replace({
-        query: merge(this.$route.query, {
-          page
-        })
-      });
       this.currentPage = page;
       this._getArticleList();
     },
@@ -200,7 +208,6 @@ export default {
     },
     // 删除分类
     destroy(id) {
-      console.log(id);
       this.$Modal.confirm({
         title: "提示",
         content: "<p>确定删除此物品吗？</p>",
@@ -211,7 +218,6 @@ export default {
             this.$Message.success("删除成功");
             this._getArticleList();
           } catch (e) {
-            console.log(e);
             this.$Message.error(e);
           } finally {
             this.$Modal.remove();

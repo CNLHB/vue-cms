@@ -46,7 +46,7 @@
               <Dropdown transfer trigger="click" @on-click="exitAccount">
                 <a href="javascript:void(0)">
                     <!-- adminAuth.email -->
-                  <span class="main-user-name">DBIS</span>
+                  <span class="main-user-name">BDIS</span>
                   <Icon type="arrow-down-b"></Icon>
                 </a>
                 <DropdownMenu slot="list">
@@ -73,7 +73,7 @@
             </div>
           </div>
           <div class="layout-copy">
-            2019 &copy; dbis.com
+            {{new Date().getFullYear()}} &copy; bdis.com
           </div>
         </Content>
       </Layout>

@@ -78,16 +78,16 @@ export default {
           { required: false, message: "规格型号关键字不能为空", trigger: "blur" }
         ],
         status: [
-          { required: false, message: "状态关键字不能为空", trigger: "blur" }
+          { required: false, message: "状态关键字不能为空" }
         ],
         count: [
-          { required: false, message: "物品数量关键字不能为空", trigger: "blur" }
+          { required: false, message: "物品数量关键字不能为空" }
         ],
         payTime: [
-          { required: false, message: "购买时间关键字不能为空", trigger: "blur" }
+          { required: false, message: "购买时间关键字不能为空" }
         ],
         price: [
-          { required: false, message: "价格关键字不能为空", trigger: "blur" }
+          { required: false, message: "价格关键字不能为空" }
         ]
       }
     };
@@ -116,7 +116,6 @@ export default {
       cateId: data.cateId,
       aid:data.aid
     };
-    console.log(data);
   },
   methods: {
     ...mapActions({
@@ -127,9 +126,8 @@ export default {
     async _createCategory() {
       this.formValidate.id = this.id;
       try {
-        console.log(this.formValidate);
         await this.updateArticle(this.formValidate);
-        this.$Message.success("创建成功!");
+        this.$Message.success("更新成功!");
         this.$router.push("/category");
       } catch (e) {}
     },

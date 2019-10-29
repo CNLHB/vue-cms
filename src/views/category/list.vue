@@ -20,9 +20,13 @@
         </template>
       </Table>
       <section class="page">
-        <Page 
-        :total="page.total" :page-size="page.per_page" :current="page.current_page" show-total
-         on-change="changePage" />
+        <Page
+          :total="page.total"
+          :page-size="page.per_page"
+          :current="page.current_page"
+          show-total
+          @on-change="changePage"
+        />
       </section>
     </section>
   </section>
@@ -40,11 +44,9 @@ export default {
         current_page: 1,
         per_page: 1,
         total: 0
-        // total_pages: 4
       },
-      currentPage:0,
-      list: [
-      ],
+      currentPage: 0,
+      list: [],
       columns: [
         {
           title: "ID",
@@ -78,7 +80,7 @@ export default {
     };
   },
   created() {
-    this._getCategoryList({ pageNum: 1, pageSize: 10 });
+    this._getCategoryList({ pageNum: this.currentPage, pageSize: 10 });
   },
   methods: {
     ...mapActions({
@@ -97,7 +99,7 @@ export default {
       this.list = data.data.list.map(item => {
         return {
           cid: item.cid,
-          IemNum: item.assets.length,
+          IemNum: item.num,
           cateName: item.cateName,
           parent_id: 0
         };
@@ -112,7 +114,7 @@ export default {
       this.$router.push(`/category/update/${id}`);
     },
     look(id) {
-        this.$router.push(`/goods/list/${id}`);
+      this.$router.push(`/goods/list/${id}`);
     },
     // 删除分类
     destroy(id) {
@@ -124,7 +126,7 @@ export default {
           try {
             await this.destroyCategory(id);
             this.$Message.success("删除成功");
-
+            this._getCategoryList({ pageNum: this.currentPage, pageSize: 10 });
             this._getCategoryList();
           } catch (e) {
             this.$Message.error(e);
@@ -139,15 +141,10 @@ export default {
     },
     changePage(page) {
       console.log(page);
-      this.$router.replace({
-        query: merge(this.$route.query, {
-          page
-        })
-      });
       this.currentPage = page;
+      this._getCategoryList({ pageNum: this.currentPage, pageSize: 10 });
     }
   }
-  // 切换分页
 };
 </script>
 

@@ -31,6 +31,12 @@ const routers = [
         component: (resolve) => require(['../views/admin/index.vue'], resolve),
       },
       {
+        path: 'admin/create',
+        name: 'admin/create',
+        meta: {module: "/admin", group: "set", title: '管理员 - 注册'},
+        component: (resolve) => require(['../views/admin/create.vue'], resolve),
+      },
+      {
         path: 'adminlist',
         name: 'adminList',
         meta: {module: "/adminList", group: "set", title: '管理员 - 列表'},

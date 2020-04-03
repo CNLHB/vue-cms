@@ -79,7 +79,6 @@ const menus = [
     //       },
     //     ]
     //   }
-
   ];
 
 export {menus};

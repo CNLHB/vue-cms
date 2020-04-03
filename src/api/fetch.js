@@ -52,7 +52,6 @@ Util.ajax.interceptors.response.use(response => {
 
 export default {
     post(url, data) {
-        console.log(qs.stringify(data))
         return Util.ajax({
             method: 'post',
             url: url,

@@ -1,3 +1,4 @@
+
 <template>
   <section class="listMain">
     <section>
@@ -5,7 +6,10 @@
         <template slot-scope="{ row }" slot="name">
           <strong>{{ row.name }}</strong>
         </template>
-        <template slot-scope="{ row, index }" slot="action">
+        <template slot-scope="{ row}" slot="action1">
+          <Button type="primary" size="small" @click="abink(row.aid)">查看</Button>
+        </template>
+        <template slot-scope="{ row}" slot="action">
           <Button type="primary" size="small" style="margin-right: 5px" @click="update(row.aid)">编辑</Button>
           <Button type="error" size="small" @click="destroy(row.aid)">删除</Button>
         </template>
@@ -22,20 +26,18 @@
     </section>
   </section>
 </template>
-
 <script>
 import merge from "webpack-merge";
 import { mapState, mapActions } from "vuex";
-
 export default {
   name: "list",
   data() {
     return {
       page: {
-        count: 39,
+        count: 0,
         current_page: 1,
         per_page: 10,
-        total: 39
+        total: 0
       },
       list: [],
       page: {},
@@ -82,16 +84,23 @@ export default {
           align: "center",
           key: "count"
         },
-        {
-          title: "状态",
-          width: 100,
-          align: "center",
-          key: "status"
-        },
+        // {
+        //   title: "状态",
+        //   width: 100,
+        //   align: "center",
+        //   key: "status"
+        // },
         {
           title: "创建时间",
           width: 150,
           key: "payTime",
+          align: "center"
+        },
+                
+        {
+          title: "详情",
+          slot: "action1",
+          width: 150,
           align: "center"
         },
         {
@@ -205,6 +214,9 @@ export default {
     // 更新
     update(id) {
       this.$router.push(`/goods/update/${id}`);
+    },
+    abink(id){
+        this.$router.push("/goods/detail/" + id)
     },
     // 删除分类
     destroy(id) {

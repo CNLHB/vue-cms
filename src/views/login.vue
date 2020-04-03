@@ -25,11 +25,15 @@
             <FormItem>
               <Button :loading="buttonLoading" @click="handleSubmit" type="primary" long>登录</Button>
             </FormItem>
+             <FormItem>
+              <Button :loading="buttonLoading" @click="handleRegister" type="primary" long>注册</Button>
+            </FormItem>
           </Form>
         </div>
       </Card>
     </div>
   </div>
+  
 </template>
 
 <script>
@@ -65,7 +69,8 @@
     },
     methods: {
       ...mapActions({
-        login: 'admin/login'
+        login: 'admin/login',
+        register: 'admin/register'
       }),
 
       // 提交登录
@@ -79,23 +84,61 @@
             this.buttonLoading = false;
             return false
           }
-
           console.log('start')
 
           this.login(this.form).then(ret => {
             console.log('done')
-            this.$ls.set('token', ret.data.token);
+            this.$ls.set('token', "user");
             // 跳转
             this.$Message.success("登录成功！");
-            window.location.href = '/'
+                this.$router.push(`/`);
+            // window.location.href = '/'
 
           }).catch(err => {
             console.log('err')
             //删除
             this.$ls.set('token', "suc");
             // 跳转
-            this.$Message.success("登录成功！");
-            window.location.href = '/'
+            this.$Message.error("登录失败！");
+            // this.$router.push(`/`);
+            // window.location.href = '/'
+            //删除
+            this.buttonLoading = false
+
+          })
+        })
+      },
+      handleRegister(){
+           this.buttonLoading = true;
+        // 表单验证
+        var formLabel = this.$refs.loginForm;
+        formLabel.validate((valid) => {
+          if (!valid) {
+            this.$Message.error('表单验证失败!');
+            this.buttonLoading = false;
+            return false
+          }
+          console.log('start')
+
+          this.register(this.form).then(ret => {
+            // 跳转
+            if(ret.data.status == 0){
+                this.$Message.success("用户名为空或已存在！");
+                this.form.email = null
+                this.form.password = null
+
+            }else{
+                this.$Message.success("注册成功！");
+            }
+            this.buttonLoading = false
+
+          }).catch(err => {
+            console.log('err')
+            //删除
+            // 跳转
+            this.$Message.error("注册失败！");
+            // this.$router.push(`/`);
+            // window.location.href = '/'
             //删除
             this.buttonLoading = false
 
@@ -126,7 +169,7 @@
 
   .login-con {
     position: absolute;
-    right: 160px;
+    right: 70px;
     top: 50%;
     transform: translateY(-60%);
     width: 300px;

@@ -5,6 +5,7 @@ const routers = [
       title: "登录",
       noAuth: true
     },
+    // component: (resolve)=>require([...],resolve)
     component: (resolve) => require(['../views/login.vue'], resolve),
   },
   {
@@ -61,7 +62,7 @@ const routers = [
         meta: {edit: true, module: "/category", group: "category", title: '分类 - 更新'},
         component: (resolve) => require(['../views/category/update.vue'], resolve),
       },
-      //todo: 文章管理
+      //todo: 资产管理
       {
         path: 'goods',
         name: 'goods',
@@ -75,6 +76,12 @@ const routers = [
         component: (resolve) => require(['../views/goods/list.vue'], resolve),
       },
       {
+        path: 'goods/detail/:id',
+        name: 'goods/detail',
+        meta: {module: "/goods", group: "goods", title: '物品 - 详情'},
+        component: (resolve) => require(['../views/goods/detail.vue'], resolve),
+      },
+      {
         path: 'goods/create',
         name: 'goods/create',
         meta: {module: "/goods/create", group: "goods", title: '资产 - 创建'},
@@ -86,19 +93,19 @@ const routers = [
         meta: {edit: true, module: "/goods", group: "goods", title: '资产 - 更新'},
         component: (resolve) => require(['../views/goods/update.vue'], resolve),
       },
-      //todo: 借还管理
-      {
-        path: 'loanoutList',
-        name: 'loanoutList',
-        meta: {module: "/loanoutList", group: "loanoutList", title: '借出- 列表'},
-        component: (resolve) => require(['../views/loanOut/loanOutList.vue'], resolve),
-      },
-      {
-        path: 'returnList',
-        name: 'returnList',
-        meta: {module: "/returnList", group: "returnList", title: '归还 - 列表'},
-        component: (resolve) => require(['../views/loanOut/returnList.vue'], resolve),
-      },
+    //   //todo: 借还管理
+    //   {
+    //     path: 'loanoutList',
+    //     name: 'loanoutList',
+    //     meta: {module: "/loanoutList", group: "loanoutList", title: '借出- 列表'},
+    //     component: (resolve) => require(['../views/loanOut/loanOutList.vue'], resolve),
+    //   },
+    //   {
+    //     path: 'returnList',
+    //     name: 'returnList',
+    //     meta: {module: "/returnList", group: "returnList", title: '归还 - 列表'},
+    //     component: (resolve) => require(['../views/loanOut/returnList.vue'], resolve),
+    //   },
       {
         //todo: 404
         path: '/403',

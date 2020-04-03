@@ -1,7 +1,8 @@
 <template>
   <section class="listMain">
-    <!-- admin.list -->
+    <!-- admin.list       v-if="user"-->
     <Button
+    v-if="false"
       type="primary"
       @click="toPathLink('/admin/create')"
       icon="md-add"
@@ -33,14 +34,13 @@ import list from "../../api/admin";
 import admin from "../../api/admin";
 export default {
   components: {},
-
   data() {
     return {
       page: {
-        count: 39,
+        count: 0,
         current_page: 1,
         per_page: 10,
-        total: 39
+        total: 0
       },
       list: [],
       columns: [
@@ -50,7 +50,7 @@ export default {
           width: 80,
           align: "center"
         },
-                {
+        {
           title: "管理员邮箱",
           key: "userMail",
           align: "center"
@@ -113,7 +113,7 @@ export default {
     },
     toPathLink(path) {
       this.$router.push(path);
-    }, 
+    },
     // 切换分页
     handlePage(page) {
       this.currentPage = page;
@@ -135,7 +135,7 @@ export default {
           id: item.id,
           userName: item.userName,
           userPrivilege: item.userPrivilege == "暂无权限限制" ? 16 : 1,
-          userMail:item.userMail
+          userMail: item.userMail
         };
       });
       this.list = adminList;

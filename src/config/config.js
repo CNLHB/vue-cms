@@ -1,6 +1,5 @@
-import Env from './env';
 
 let config = {
-    env: Env
+    URL:"http://47.101.196.193:8088"
 };
 export default config;

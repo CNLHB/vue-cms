@@ -3,7 +3,17 @@ import fetch from './fetch';
 export default {
   // 登录
   login(params) {
-    return fetch.post('/admin/login', params)
+    // return fetch.post('/admin/login', params)
+    params.userName = params.email
+    return fetch.post('/users/login', params)
+
+  },
+  register(params){
+    params.userName = params.email
+    params.userPassword = params.password
+    params.userMail = params.email
+
+    return fetch.post('/users/register', params)
   },
 
   // 验证管理员token
@@ -30,4 +40,5 @@ export default {
             }
     })
   }
+
 }
